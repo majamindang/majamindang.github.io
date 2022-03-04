@@ -1,1 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Math Challenge for Kiel</title>
+</head>
+<body>
+    <div class="left">
+        
+    </div>
+    <div class="right">
+        <p class="description">KIEL's<br>SCORE</p>
+        <p class="score"></p>
+        <img src="kiel.jpg">
+    </div>
+    <script>
+        const questions = 30;
+        const maxNum = 40;
+        document.querySelector('.score').innerText = `0 / ${questions}`;
+        const left = document.querySelector('.left');
+        let score = 0;
+        let change = 0;
+        for(i=0; i < questions; i++){
+            let twoNums = [Math.round(Math.random() * maxNum), Math.round(Math.random() * maxNum)];
+            let operator = ['addition', 'subtraction'][Math.round(Math.random() * 1)];
+            twoNums = twoNums[0] > twoNums[1] ? [twoNums[0], twoNums[1]] : [twoNums[1], twoNums[0]];
+            if(operator == "addition"){
+                var o = "+";
+                var a = twoNums[0] + twoNums[1];
+            } else {
+                var o = "-";
+                var a = twoNums[0] - twoNums[1];
+            }
 
+                left.innerHTML += `<div class="questionField" data-answer="${a}">
+            <div class="item">
+                <p class="itemNumber">${i + 1}</p>
+            </div>
+            <div class="itemChallenge">
+                <div class="eq">
+                    <div class="two">
+                        <p class="first">${twoNums[0]}</p>
+                        <p class="second">${twoNums[1]}</p>
+                        <p class="operator">${o}</p>
+                    </div>
+                </div>
+                <input type="text" class="answer" placeholder="?">
+            </div>
+        </div>`;
+        }
+
+        function checkScore(){
+            let scores = 0;
+            let qf = document.querySelectorAll('.questionField');
+            for(i=0; i < qf.length; i++){
+                if(qf[i].querySelector('input').value === qf[i]['dataset']['answer']){
+                    scores++;
+                }
+            }
+            score = scores;
+            document.querySelector('.score').innerText = `${score} / ${questions}`;
+        }
+
+        const questionFields = document.querySelectorAll('.questionField input');
+        for(i=0; i < questionFields.length; i++){
+            questionFields[i].addEventListener('keyup', function(){
+                
+                if(this.value != parseInt(this.parentElement.parentElement['dataset']['answer'])){
+                    this.parentElement.parentElement.querySelector('.itemNumber').classList.remove('correct');
+                    this.parentElement.parentElement.querySelector('.itemNumber').classList.add('wrong');
+                } else {
+                    this.parentElement.parentElement.querySelector('.itemNumber').classList.remove('wrong');
+                    this.parentElement.parentElement.querySelector('.itemNumber').classList.add('correct');
+                }
+
+                checkScore();
+            });
+        }
+    </script>
+</body>
+</html>

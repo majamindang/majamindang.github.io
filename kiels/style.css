@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Permanent Marker', cursive;
+}
+
+*:focus {
+    outline: none;
+}
+
+body {
+    display: flex;
+    flex-direction: row;
+}
+
+.left {
+    display: grid;
+    grid-template-columns: repeat( auto-fit, minmax(100px, 1fr));
+    width: 50%;
+    padding: 20px;
+}
+
+.right {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.right img {
+    width: 100%;
+    border: 3px solid purple;
+    margin-top: 50px;
+}
+
+.item {
+    display: flex;
+    height: 100px;
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+
+.itemNumber {
+    width: 30px;
+    height: 30px;
+    background: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    /* margin-right: 10px; */
+}
+
+.equation {
+    margin-right: 5px;
+}
+
+.questionField {
+    display: flex;
+    flex-direction: row;
+    height: auto;
+    margin: 5px 10px;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.first, .second {
+    text-align: right;
+}
+
+.itemChallenge {
+    height: 100px;
+}
+
+.eq {
+    display: flex;
+}
+
+.two {
+    position: relative;
+    width: 100%;
+    padding-right: 25px;
+    font-size: 1.5rem;
+}
+
+.operator {
+    position: absolute;
+    bottom: 0;
+    right: 55px;
+    color: purple;
+}
+
+.questionField input {
+    border: 1px solid black;
+    width: 70px;
+    height: 30px;
+    margin-right: 10px;
+    text-align: center;
+    color: green;
+    font-size: 1.5rem;
+}
+
+.solution {
+    font-weight: bold;
+}
+
+.correct {
+    background: green;
+}
+
+.wrong {
+    background: red;
+}
+
+.right p {
+    font-size: 3rem;
+}
+
+.score {
+    color: purple;
+}
