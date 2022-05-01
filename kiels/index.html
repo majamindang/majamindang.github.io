@@ -104,14 +104,15 @@
                 checkScore();
             });
         }
-
-        window.addEventListener('scroll', e => {
-            if(this.scrollY != 0) {
-                topScore.classList.add('showThis');
-            } else {
-                topScore.classList.remove('showThis');
-            }
-        })
+        if(window.innerWidth < 600) {
+            window.addEventListener('scroll', e => {
+                if(this.scrollY != 0) {
+                    topScore.classList.add('showThis');
+                } else {
+                    topScore.classList.remove('showThis');
+                }
+            })
+        }
     </script>
 </body>
 </html>
