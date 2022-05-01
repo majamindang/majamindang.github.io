@@ -17,22 +17,39 @@
         <img src="kiel.jpg">
     </div>
     <script>
-        const questions = 30;
+        const methods = [
+            'multiplication'
+        ];
+        const questions = 100;
         const maxNum = 40;
+        const maxNumMultiplication = 9;
         document.querySelector('.score').innerText = `0 / ${questions}`;
         const left = document.querySelector('.left');
         let score = 0;
         let change = 0;
         for(i=0; i < questions; i++){
+            let operator = methods[Math.round(Math.random() * (methods.length - 1))];
             let twoNums = [Math.round(Math.random() * maxNum), Math.round(Math.random() * maxNum)];
-            let operator = ['addition', 'subtraction'][Math.round(Math.random() * 1)];
+
+            if(operator == 'multiplication'){
+                twoNums = [Math.round(Math.random() * maxNumMultiplication), Math.round(Math.random() * maxNumMultiplication)];
+                console.log(twoNums);
+            }
+
             twoNums = twoNums[0] > twoNums[1] ? [twoNums[0], twoNums[1]] : [twoNums[1], twoNums[0]];
-            if(operator == "addition"){
-                var o = "+";
-                var a = twoNums[0] + twoNums[1];
-            } else {
-                var o = "-";
-                var a = twoNums[0] - twoNums[1];
+            
+            switch(operator) {
+                case 'addition':
+                    var o = "+";
+                    var a = twoNums[0] + twoNums[1];
+                    break;
+                case 'subtraction':
+                    var o = "-";
+                    var a = twoNums[0] - twoNums[1];
+                    break;
+                case 'multiplication':
+                    var o = "x";
+                    var a = twoNums[0] * twoNums[1];
             }
 
                 left.innerHTML += `<div class="questionField" data-answer="${a}">
@@ -47,7 +64,7 @@
                         <p class="operator">${o}</p>
                     </div>
                 </div>
-                <input type="text" class="answer" placeholder="?">
+                <input type="number" class="answer" placeholder="?">
             </div>
         </div>`;
         }
@@ -66,8 +83,7 @@
 
         const questionFields = document.querySelectorAll('.questionField input');
         for(i=0; i < questionFields.length; i++){
-            questionFields[i].addEventListener('keyup', function(){
-                
+            questionFields[i].addEventListener('keyup', function(e){
                 if(this.value != parseInt(this.parentElement.parentElement['dataset']['answer'])){
                     this.parentElement.parentElement.querySelector('.itemNumber').classList.remove('correct');
                     this.parentElement.parentElement.querySelector('.itemNumber').classList.add('wrong');
@@ -75,7 +91,6 @@
                     this.parentElement.parentElement.querySelector('.itemNumber').classList.remove('wrong');
                     this.parentElement.parentElement.querySelector('.itemNumber').classList.add('correct');
                 }
-
                 checkScore();
             });
         }
