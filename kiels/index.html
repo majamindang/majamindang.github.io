@@ -8,6 +8,9 @@
     <title>Math Challenge for Kiel</title>
 </head>
 <body>
+    <div class="topScore" class="inc">
+        <span class="scoreText">Score:</span><span class="scoreCurrent">0</span> / <span class="scoreTotal">100</span>
+    </div>
     <div class="left">
         
     </div>
@@ -27,6 +30,12 @@
         const left = document.querySelector('.left');
         let score = 0;
         let change = 0;
+
+        const topScore = document.querySelector('.topScore');
+        const topScoreCurrent = document.querySelector('.scoreCurrent');
+        const topScoreTotal = document.querySelector('.scoreTotal');
+        topScoreTotal.innerText = questions;
+
         for(i=0; i < questions; i++){
             let operator = methods[Math.round(Math.random() * (methods.length - 1))];
             let twoNums = [Math.round(Math.random() * maxNum), Math.round(Math.random() * maxNum)];
@@ -79,6 +88,7 @@
             }
             score = scores;
             document.querySelector('.score').innerText = `${score} / ${questions}`;
+            topScoreCurrent.innerText = score;
         }
 
         const questionFields = document.querySelectorAll('.questionField input');
@@ -94,6 +104,14 @@
                 checkScore();
             });
         }
+
+        window.addEventListener('scroll', e => {
+            if(this.scrollY != 0) {
+                topScore.classList.add('showThis');
+            } else {
+                topScore.classList.remove('showThis');
+            }
+        })
     </script>
 </body>
 </html>
