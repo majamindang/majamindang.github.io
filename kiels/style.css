@@ -1,10 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    font-family: 'Permanent Marker', cursive;
+    font-family: 'Poppins', sans-serif;
+    --primary: #0f9191;
+    --secondary: black;
+    --tertiary: white;
+    --item-background: #e6e6e6;
+    --item-correct: #59ff59;
+    --item-wrong: #ff4f4f;
+    --question-border: 1px solid var(--secondary);
 }
 
 *:focus {
@@ -34,7 +41,7 @@ input[type=number] {
     width: 50%;
     padding: 20px;
     height: 100vh;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 
 .right {
@@ -48,8 +55,23 @@ input[type=number] {
 
 .right img {
     width: 100%;
-    border: 3px solid purple;
+    border: 3px solid var(--primary);
     margin-top: 50px;
+}
+
+.right .rightSettingIcon {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: var(--primary);
+    cursor: pointer;
+    user-select: none;
+    transition: all 300ms ease;
+    font-size: 2rem;
+}
+
+.right .rightSettingIcon:hover {
+    color: var(--secondary);
 }
 
 .item {
@@ -62,13 +84,13 @@ input[type=number] {
 .itemNumber {
     width: 30px;
     height: 30px;
-    background: red;
+    background: var(--item-background);
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: 50%;
     /* margin-right: 10px; */
-}
+font-weight: bold;}
 
 .equation {
     margin-right: 5px;
@@ -87,6 +109,14 @@ input[type=number] {
     text-align: right;
 }
 
+.first {
+    grid-area: first
+}
+
+.second  {
+    grid-area: second;
+}
+
 .itemChallenge {
     height: 100px;
 }
@@ -95,27 +125,32 @@ input[type=number] {
     display: flex;
 }
 
+.operator {
+    color: var(--primary);
+    grid-area: operator;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
 .two {
     position: relative;
     width: 100%;
     padding-right: 25px;
     font-size: 1.5rem;
-}
-
-.operator {
-    position: absolute;
-    bottom: 0;
-    right: 55px;
-    color: purple;
+    display: grid;
+    grid-template-areas:
+    'operator first'
+    'operator second';
 }
 
 .questionField input {
-    border: 1px solid black;
+    border: var(--question-border);
     width: 70px;
     height: 30px;
     margin-right: 10px;
     text-align: center;
-    color: green;
+    color: var(--secondary);
     font-size: 1.5rem;
 }
 
@@ -124,11 +159,18 @@ input[type=number] {
 }
 
 .correct {
-    background: green;
+    background: var(--item-correct);
+}
+
+input:disabled {
+    background: #bfbfbf;
+    border: 1px solid gray;
+    color: white;
+    user-select: none;
 }
 
 .wrong {
-    background: red;
+    background: var(--item-wrong);
 }
 
 .right p {
@@ -136,7 +178,7 @@ input[type=number] {
 }
 
 .score {
-    color: purple;
+    color: var(--primary);
 }
 
 .topScore {
@@ -144,28 +186,120 @@ input[type=number] {
     top: 0;
     left: 0;
     width: 100%;
-    background: purple;
+    background: var(--primary);
     padding: 5px 10px;
-    color: white;
+    color: var(--tertiary);
     z-index: 1;
+    box-shadow: 0px 1px 10px var(--secondary);
     display: none;
 }
 
 .scoreText {
-    color: white;
+    color: var(--tertiary);
     margin-right: 10px;
 }
 
 .scoreCurrent {
-    color: white;
+    color: var(--tertiary);
 }
 
 .scoreTotal {
-    color: white;
+    color: var(--tertiary);
 }
 
 .showThis {
     display: block;
+}
+
+/* MODAL */
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: grid;
+    place-items: center;
+    z-index: 2;
+    overflow: hidden;
+    transition: all 300ms ease;
+}
+
+.modal.open {
+    height: 100%;
+    opacity: 1;
+}
+
+.modal.close {
+    height: 0%;
+    opacity: 0;
+}
+
+.settings {
+    min-width: 300px;
+    background: var(--tertiary);
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.settings table {
+    width: 100%;
+}
+
+.settings table tr {
+    width: 100%;
+    height: 35px;
+}
+
+.settings table tr td {
+    width: 50%;
+}
+
+.settings table tr td input[type=number], .settings table tr td input[type=text] {
+    width: 50%;
+    padding: 2px 5px;
+    width: 100%;
+}
+
+.settings table tr td.withCheckbox {
+    padding-left: 20px;
+}
+
+.settings table tr td input:disabled {
+    background: #bfbfbf;
+    border: 1px solid gray;
+    user-select: none;
+}
+
+.settings .confirmDiv {
+    display: flex;
+    width: 100%;
+    padding: 20px;
+    gap: 10px;
+}
+
+.settings .confirmDiv button {
+    width: 10rem;
+    height: 2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.settings .confirmDiv button#closeSettings {
+    background: var(--item-background);
+    color: var(--secondary);
+}
+
+.settings .confirmDiv button#saveSettings {
+    background: var(--primary);
+    color: var(--tertiary);
+}
+
+.settings .confirmDiv button:hover {
+    opacity: 0.8;
 }
 
 @media only screen and (max-width: 600px){

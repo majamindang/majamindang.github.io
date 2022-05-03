@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Math Challenge for Kiel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp" rel="stylesheet" />
+    <title>Math Challenge</title>
 </head>
 <body>
     <div class="topScore" class="inc">
@@ -15,15 +16,105 @@
         
     </div>
     <div class="right">
-        <p class="description">KIEL's<br>SCORE</p>
+        <p class="description">YOUR SCORE</p>
         <p class="score"></p>
         <img src="kiel.jpg">
+        <span class="rightSettingIcon material-symbols-sharp">settings</span>
+    </div>
+    <div class="modal close">
+        <div class="settings">
+            <h1>Settings</h1>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <label for="item_quantity">Items</label>
+                        </td>
+                        <td>
+                            <input type="number" name="item_quantity" id="item_quantity" placeholder="Quantity">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="withCheckbox2">
+                            <input type="checkbox" name="addImage" id="addImage">
+                            <label for="addImage">Add Image</label>
+                        </td>
+                        <td>
+                            <input type="text" name="addImageUrl" id="addImageUrl" placeholder="Image URL">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <p>Choose Methods</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="withCheckbox">
+                            <input type="checkbox" name="addition" id="addition">
+                            <label for="addition">Addition</label>
+                        </td>
+                        <td>
+                            <input type="number" name="addMax" id="addMax" placeholder="Quantity">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="withCheckbox">
+                            <input type="checkbox" name="subtraction" id="subtraction">
+                            <label for="subtraction">Subtraction</label>
+                        </td>
+                        <td>
+                            <input type="number" name="subMax" id="subMax" placeholder="Quantity">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="withCheckbox">
+                            <input type="checkbox" name="multiplication" id="multiplication">
+                            <label for="multiplication">Multiplication</label>
+                        </td>
+                        <td>
+                            <input type="number" name="mulMax" id="mulMax" placeholder="Quantity">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="withCheckbox">
+                            <input type="checkbox" name="division" id="division">
+                            <label for="division">Division</label>
+                        </td>
+                        <td>
+                            <input type="number" name="divMax" id="divMax" placeholder="Quantity">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="confirmDiv">
+                <button id="saveSettings">SAVE</button>
+                <button id="closeSettings">CLOSE</button>
+            </div>
+        </div>
     </div>
     <script>
-        const methods = [
-            'multiplication'
-        ];
-        const questions = 100;
+
+        if(!localStorage.config){
+            localStorage.config = JSON.stringify({
+                methods: [{name: 'addition', max: 40}],
+                addImage: false,
+                addImageUrl: null,
+                quantity: 100
+            });
+
+
+        }
+
+        let config = JSON.parse(localStorage.config);
+
+        if(config.addImage) {
+            document.querySelector('.right img').src = config.addImageUrl;
+            document.querySelector('.right img').style.display = 'block';
+        } else {
+            document.querySelector('.right img').style.display = 'none';
+        }
+
+        const questions = config.quantity;
         const maxNum = 40;
         const maxNumMultiplication = 9;
         document.querySelector('.score').innerText = `0 / ${questions}`;
@@ -34,43 +125,60 @@
         const topScore = document.querySelector('.topScore');
         const topScoreCurrent = document.querySelector('.scoreCurrent');
         const topScoreTotal = document.querySelector('.scoreTotal');
+        const settingBtn = document.querySelector('.right .rightSettingIcon');
+
+        const itemQuantity = document.querySelector('#item_quantity');
+        const addImage = document.querySelector('#addImage');
+        const addImageUrl = document.querySelector('#addImageUrl');
+        const addCheck = document.querySelector('#addition');
+        const subCheck = document.querySelector('#subtraction');
+        const mulCheck = document.querySelector('#multiplication');
+        const divCheck = document.querySelector('#division');
+        const addMax = document.querySelector('#addMax');
+        const subMax = document.querySelector('#subMax');
+        const mulMax = document.querySelector('#mulMax');
+        const divMax = document.querySelector('#divMax');
+        const modal = document.querySelector('.modal');
+        
+        const saveSettings = document.querySelector('#saveSettings');
+        const closeSettings = document.querySelector('#closeSettings');
+
         topScoreTotal.innerText = questions;
 
         for(i=0; i < questions; i++){
-            let operator = methods[Math.round(Math.random() * (methods.length - 1))];
-            let twoNums = [Math.round(Math.random() * maxNum), Math.round(Math.random() * maxNum)];
-
-            if(operator == 'multiplication'){
-                twoNums = [Math.round(Math.random() * maxNumMultiplication), Math.round(Math.random() * maxNumMultiplication)];
-                console.log(twoNums);
-            }
+            let opp = config.methods[Math.round(Math.random() * (config.methods.length - 1))];
+            let operator = opp.name;
+            let twoNums = [Math.round(Math.random() * opp.max), Math.round(Math.random() * opp.max)];
 
             twoNums = twoNums[0] > twoNums[1] ? [twoNums[0], twoNums[1]] : [twoNums[1], twoNums[0]];
             
             switch(operator) {
                 case 'addition':
                     var o = "+";
-                    var a = twoNums[0] + twoNums[1];
+                    var a = 'addition';
                     break;
                 case 'subtraction':
                     var o = "-";
-                    var a = twoNums[0] - twoNums[1];
+                    var a = 'subtraction';
                     break;
                 case 'multiplication':
                     var o = "x";
-                    var a = twoNums[0] * twoNums[1];
+                    var a = 'multiplication';
+                case 'division':
+                    var o = "÷";
+                    var a = 'division';
             }
 
-                left.innerHTML += `<div class="questionField" data-answer="${a}">
+                left.innerHTML += `<div class="questionField" data-method="${a}">
             <div class="item">
                 <p class="itemNumber">${i + 1}</p>
             </div>
             <div class="itemChallenge">
                 <div class="eq">
                     <div class="two">
+                        <p class="operator">${o}</p>
                         <p class="first">${twoNums[0]}</p>
                         <p class="second">${twoNums[1]}</p>
-                        <p class="operator">${o}</p>
                     </div>
                 </div>
                 <input type="number" class="answer" placeholder="?">
@@ -78,11 +186,32 @@
         </div>`;
         }
 
-        function checkScore(){
+        function calculate(method, num1, num2) {
+            let answer = null;
+            switch(method){
+                case 'addition':
+                    answer = num1 + num2;
+                    break;
+                case 'subtraction':
+                    answer = num1 - num2;
+                    break;
+                case 'multiplication':
+                    answer = num1 * num2;
+                    break;
+            }
+
+            return answer;
+        }
+
+        function checkScore() {
             let scores = 0;
             let qf = document.querySelectorAll('.questionField');
             for(i=0; i < qf.length; i++){
-                if(qf[i].querySelector('input').value === qf[i]['dataset']['answer']){
+                let num1 = parseInt(document.querySelectorAll('.first')[i].innerText);
+                let num2 = parseInt(document.querySelectorAll('.second')[i].innerText);
+                let rightAnswer = calculate(qf[i]['dataset']['method'], num1, num2);
+                // console.log(qf[i]['dataset']['method'], num1, num2, rightAnswer, qf[i].querySelector('input').value);
+                if(parseInt(qf[i].querySelector('input').value) === rightAnswer){
                     scores++;
                 }
             }
@@ -94,16 +223,23 @@
         const questionFields = document.querySelectorAll('.questionField input');
         for(i=0; i < questionFields.length; i++){
             questionFields[i].addEventListener('keyup', function(e){
-                if(this.value != parseInt(this.parentElement.parentElement['dataset']['answer'])){
+                let num1 = parseInt(this.parentElement.querySelector('.first').innerText);
+                let num2 = parseInt(this.parentElement.querySelector('.second').innerText);
+                let rightAnswer = calculate(this.parentElement.parentElement['dataset']['method'], num1, num2);
+                console.log(this.value, rightAnswer);   
+                if(this.value != rightAnswer){
+                    this.removeAttribute('disabled', '');
                     this.parentElement.parentElement.querySelector('.itemNumber').classList.remove('correct');
                     this.parentElement.parentElement.querySelector('.itemNumber').classList.add('wrong');
                 } else {
+                    this.setAttribute('disabled', '');
                     this.parentElement.parentElement.querySelector('.itemNumber').classList.remove('wrong');
                     this.parentElement.parentElement.querySelector('.itemNumber').classList.add('correct');
                 }
                 checkScore();
             });
         }
+
         if(window.innerWidth < 600) {
             window.addEventListener('scroll', e => {
                 if(this.scrollY != 0) {
@@ -113,6 +249,110 @@
                 }
             })
         }
+
+        settingBtn.addEventListener('click', e => {
+            modal.classList.toggle('close');
+            modal.classList.toggle('open');
+        });
+
+        [addImage, addCheck, subCheck, mulCheck, divCheck].forEach(check => {
+            check.parentElement.parentElement.querySelector('input[type=number], input[type=text]').setAttribute('disabled', '');
+            check.addEventListener('click', e => {
+                if(e.target.checked) {
+                    e.target.parentElement.parentElement.querySelector('input[type=number], input[type=text]').removeAttribute('disabled', '');
+                } else {
+                    e.target.parentElement.parentElement.querySelector('input[type=number], input[type=text]').setAttribute('disabled', '');
+                }
+            });
+        });
+
+        itemQuantity.value = config.quantity;
+
+        config.methods.forEach(m => {
+            document.querySelector(`#${m.name}`).checked = true;
+            document.querySelector(`#${m.name}`).parentElement.parentElement.querySelector('input[type=number]').value = m.max;
+            document.querySelector(`#${m.name}`).parentElement.parentElement.querySelector('input[type=number]').removeAttribute('disabled', '');
+        });
+
+        if(config.addImage){
+            addImage.checked = true;
+            addImageUrl.value = config.addImageUrl;
+            addImageUrl.removeAttribute('disabled', '')
+        } else {
+            addImageUrl.setAttribute('disabled', '')
+        }
+
+        closeSettings.addEventListener('click', e => {
+            modal.classList.toggle('open');
+            modal.classList.toggle('close');
+        });
+
+        saveSettings.addEventListener('click', e => {
+            config.quantity = itemQuantity.value;
+            config.addImage = addImage.checked ? true : false;
+            config.methods = [];
+
+            if(addImage.checked == true){
+                if(addImageUrl.value.trim() == ""){
+                    alert("Put in the Image URL!")
+                    return
+                }
+                config.addImageUrl = addImageUrl.value;
+            }
+            
+            if(addCheck.checked) {
+                if(addMax.value == 0) {
+                    alert('Input Max Number for Addition!');
+                    return
+                }
+                config.methods.push({
+                    name: 'addition',
+                    max: addMax.value
+                })
+            }
+            
+            if(subCheck.checked) {
+                if(subMax.value == 0) {
+                    alert('Input Max Number for Subtraction!')
+                    return
+                }
+                config.methods.push({
+                    name: 'subtraction',
+                    max: subMax.value
+                })
+            }
+            
+            if(mulCheck.checked) {
+                if(mulMax.value == 0) {
+                    alert('Input Max Number for Multiplication!');
+                    return
+                }
+                config.methods.push({
+                    name: 'multiplication',
+                    max: mulMax.value
+                })
+            }
+            
+            if(divCheck.checked) {
+                if(divMax.value == 0) {
+                    alert('Input Max Number for Division!');
+                    return
+                }
+                config.methods.push({
+                    name: 'division',
+                    max: divMax.value
+                })
+            }
+
+            localStorage.config = JSON.stringify(config);
+
+            modal.classList.toggle('open');
+            modal.classList.toggle('close');
+
+            window.location.href = window.location.href;
+
+        });
+
     </script>
 </body>
 </html>
