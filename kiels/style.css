@@ -317,4 +317,8 @@ input:disabled {
         width: auto;
         height: auto;
     }
+
+    .modal .settings {
+        width: 90%;
+    }
 }
